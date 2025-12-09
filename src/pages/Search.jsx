@@ -140,7 +140,7 @@ export default function Search() {
                         {results.map((book) => (
                             <div
                                 key={book.id}
-                                className="bg-white rounded-2xl shadow-sm border border-stone-100 p-4 hover:shadow-md transition-shadow group"
+                                className="bg-white rounded-2xl shadow-sm border border-stone-100 p-4 hover:shadow-md transition-shadow group h-full flex flex-col"
                             >
                                 <div className="aspect-[2/3] mb-3 overflow-hidden rounded-lg bg-stone-100">
                                     <img
@@ -160,7 +160,7 @@ export default function Search() {
 
                                 <button
                                     onClick={() => handleAddClick(book)}
-                                    className="w-full flex items-center justify-center gap-2 bg-brand-50 text-brand-700 font-medium text-sm py-2 px-3 rounded-lg hover:bg-brand-100 transition-colors border border-brand-200"
+                                    className="w-full flex items-center justify-center gap-2 bg-brand-50 text-brand-700 font-medium text-sm py-2 px-3 rounded-lg hover:bg-brand-100 transition-colors border border-brand-200 mt-auto"
                                 >
                                     <Plus className="w-4 h-4" />
                                     Adicionar

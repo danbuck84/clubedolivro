@@ -8,6 +8,7 @@ import Navbar from './components/Navbar';
 import Login from './pages/Login';
 import Home from './pages/Home';
 import Search from './pages/Search';
+import MyShelf from './pages/MyShelf';
 import Profile from './pages/Profile';
 
 // Layout wrapper para rotas protegidas (com Navbar)
@@ -46,6 +47,17 @@ function App() {
               <ProtectedRoute>
                 <ProtectedLayout>
                   <Search />
+                </ProtectedLayout>
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/estante"
+            element={
+              <ProtectedRoute>
+                <ProtectedLayout>
+                  <MyShelf />
                 </ProtectedLayout>
               </ProtectedRoute>
             }

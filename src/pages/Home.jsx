@@ -103,7 +103,7 @@ export default function Home() {
                         <div className="flex justify-between items-baseline mb-4">
                             <h2 className="text-xl font-serif font-bold text-stone-800">Lendo Agora</h2>
                             <button
-                                onClick={() => navigate('/search')}
+                                onClick={() => navigate('/estante')}
                                 className="text-brand-700 text-sm font-medium hover:underline"
                             >
                                 Ver estante
