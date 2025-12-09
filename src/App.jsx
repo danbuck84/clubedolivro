@@ -8,6 +8,7 @@ import Navbar from './components/Navbar';
 import Login from './pages/Login';
 import Home from './pages/Home';
 import Search from './pages/Search';
+import Profile from './pages/Profile';
 
 // Layout wrapper para rotas protegidas (com Navbar)
 function ProtectedLayout({ children }) {
@@ -45,6 +46,17 @@ function App() {
               <ProtectedRoute>
                 <ProtectedLayout>
                   <Search />
+                </ProtectedLayout>
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/perfil"
+            element={
+              <ProtectedRoute>
+                <ProtectedLayout>
+                  <Profile />
                 </ProtectedLayout>
               </ProtectedRoute>
             }
