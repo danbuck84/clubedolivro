@@ -6,6 +6,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { getUserLibrary } from '../services/shelfService';
 import { Loader2, BookOpen, Eye } from 'lucide-react';
+import BookDetailsModal from '../components/BookDetailsModal';
 
 export default function MyShelf() {
     const { user } = useAuth();
@@ -13,6 +14,7 @@ export default function MyShelf() {
     const [activeTab, setActiveTab] = useState('Lendo');
     const [library, setLibrary] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [selectedBook, setSelectedBook] = useState(null);
 
     const tabs = [
         { value: 'Lendo', label: 'Lendo', emoji: '📖' },
@@ -20,20 +22,21 @@ export default function MyShelf() {
         { value: 'Lido', label: 'Lidos', emoji: '✓' },
     ];
 
-    useEffect(() => {
-        async function loadLibrary() {
-            if (!user) return;
+    const loadLibrary = async () => {
+        if (!user) return;
 
-            try {
-                const books = await getUserLibrary(user.uid);
-                setLibrary(books);
-            } catch (error) {
-                console.error('Erro ao carregar biblioteca:', error);
-            } finally {
-                setLoading(false);
-            }
+        setLoading(true);
+        try {
+            const books = await getUserLibrary(user.uid);
+            setLibrary(books);
+        } catch (error) {
+            console.error('Erro ao carregar biblioteca:', error);
+        } finally {
+            setLoading(false);
         }
+    };
 
+    useEffect(() => {
         loadLibrary();
     }, [user]);
 
@@ -55,8 +58,8 @@ export default function MyShelf() {
                             key={tab.value}
                             onClick={() => setActiveTab(tab.value)}
                             className={`flex-1 py-3 px-4 font-medium transition-all relative ${activeTab === tab.value
-                                    ? 'text-brand-700 border-b-2 border-brand-600 -mb-0.5'
-                                    : 'text-stone-500 hover:text-stone-700'
+                                ? 'text-brand-700 border-b-2 border-brand-600 -mb-0.5'
+                                : 'text-stone-500 hover:text-stone-700'
                                 }`}
                         >
                             <span className="mr-2">{tab.emoji}</span>
@@ -123,6 +126,7 @@ export default function MyShelf() {
                                 )}
 
                                 <button
+                                    onClick={() => setSelectedBook(book)}
                                     className="w-full flex items-center justify-center gap-2 bg-stone-50 text-stone-700 font-medium text-sm py-2 px-3 rounded-lg hover:bg-stone-100 transition-colors border border-stone-200 mt-auto"
                                 >
                                     <Eye className="w-4 h-4" />
@@ -160,6 +164,15 @@ export default function MyShelf() {
                         </button>
                     </div>
                 </div>
+            )}
+
+            {/* Modal de Detalhes */}
+            {selectedBook && (
+                <BookDetailsModal
+                    book={selectedBook}
+                    onClose={() => setSelectedBook(null)}
+                    onUpdate={loadLibrary}
+                />
             )}
         </div>
     );

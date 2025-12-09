@@ -1,7 +1,7 @@
 // shelfService.js
 // Gerenciamento de biblioteca pessoal no Firestore
 
-import { doc, setDoc, getDoc, collection, getDocs, updateDoc, serverTimestamp, query, where } from 'firebase/firestore';
+import { doc, setDoc, getDoc, collection, getDocs, updateDoc, deleteDoc, serverTimestamp, query, where } from 'firebase/firestore';
 import { db } from './firebaseConfig';
 
 /**
