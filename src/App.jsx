@@ -4,8 +4,19 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
+import Navbar from './components/Navbar';
 import Login from './pages/Login';
 import Home from './pages/Home';
+
+// Layout wrapper para rotas protegidas (com Navbar)
+function ProtectedLayout({ children }) {
+  return (
+    <>
+      {children}
+      <Navbar />
+    </>
+  );
+}
 
 function App() {
   return (
@@ -15,12 +26,14 @@ function App() {
           {/* Rota pública */}
           <Route path="/login" element={<Login />} />
 
-          {/* Rota protegida */}
+          {/* Rotas protegidas com Navbar */}
           <Route
             path="/"
             element={
               <ProtectedRoute>
-                <Home />
+                <ProtectedLayout>
+                  <Home />
+                </ProtectedLayout>
               </ProtectedRoute>
             }
           />

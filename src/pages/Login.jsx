@@ -24,7 +24,6 @@ export default function Login() {
             setError('');
             setLoading(true);
             await loginWithGoogle();
-            // O redirecionamento será feito pelo useEffect acima
         } catch (error) {
             console.error('Erro no login:', error);
             setError('Erro ao fazer login. Tente novamente.');
@@ -34,39 +33,45 @@ export default function Login() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-red-50 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center p-4">
+        <div className="min-h-screen bg-stone-900 flex items-center justify-center p-4">
             <div className="max-w-md w-full">
                 {/* Logo e Título */}
                 <div className="text-center mb-8">
                     <div className="flex justify-center mb-6">
-                        <div className="bg-gradient-to-br from-amber-600 to-orange-700 p-5 rounded-full shadow-lg">
-                            <BookOpen className="w-14 h-14 text-white" />
+                        <div className="bg-amber-600 p-6 rounded-2xl shadow-2xl">
+                            <BookOpen className="w-16 h-16 text-white" strokeWidth={1.5} />
                         </div>
                     </div>
-                    <h1 className="text-5xl font-serif font-bold text-gray-900 dark:text-white mb-3" style={{ fontFamily: 'Georgia, serif' }}>
+                    <h1
+                        className="text-5xl font-serif font-bold text-stone-50 mb-3 tracking-tight"
+                        style={{ fontFamily: 'Georgia, serif' }}
+                    >
                         Clube do Livro
                     </h1>
-                    <p className="text-gray-600 dark:text-gray-400 text-lg">
+                    <p className="text-stone-400 text-lg">
                         Sua biblioteca pessoal
                     </p>
                 </div>
 
                 {/* Card de Login */}
-                <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-100 dark:border-gray-700">
-                    <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-6 text-center">
-                        Bem-vindo de volta! 📚
+                <div className="bg-stone-50 rounded-3xl shadow-2xl p-8 border border-stone-200">
+                    <h2 className="text-2xl font-serif font-semibold text-stone-900 mb-2 text-center">
+                        Bem-vindo de volta
                     </h2>
+                    <p className="text-stone-500 text-center mb-8 text-sm">
+                        Acesse sua conta para continuar
+                    </p>
 
                     {error && (
-                        <div className="mb-4 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-                            <p className="text-red-600 dark:text-red-400 text-sm">{error}</p>
+                        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl">
+                            <p className="text-red-700 text-sm text-center">{error}</p>
                         </div>
                     )}
 
                     <button
                         onClick={handleGoogleLogin}
                         disabled={loading}
-                        className="w-full flex items-center gap-3 justify-center bg-white dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 px-6 py-3 rounded-lg font-medium hover:bg-gray-50 dark:hover:bg-gray-600 hover:border-gray-400 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
+                        className="w-full flex items-center justify-center gap-3 bg-white border-2 border-stone-300 text-stone-700 px-6 py-4 rounded-xl font-medium hover:bg-stone-50 hover:border-stone-400 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
                     >
                         <svg className="w-5 h-5" viewBox="0 0 24 24">
                             <path
@@ -86,14 +91,23 @@ export default function Login() {
                                 d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
                             />
                         </svg>
-                        <span>{loading ? 'Entrando...' : 'Entrar com Google'}</span>
+                        <span className="font-medium">
+                            {loading ? 'Entrando...' : 'Continuar com Google'}
+                        </span>
                     </button>
 
-                    <p className="mt-6 text-center text-xs text-gray-500 dark:text-gray-400">
-                        Ao continuar, você concorda com nossos termos de uso
+                    <p className="mt-8 text-center text-xs text-stone-500">
+                        Ao continuar, você concorda com nossos<br />
+                        <span className="text-stone-600">Termos de Uso</span> e <span className="text-stone-600">Política de Privacidade</span>
                     </p>
                 </div>
+
+                {/* Footer */}
+                <p className="text-center text-stone-500 text-sm mt-8">
+                    © 2024 Clube do Livro
+                </p>
             </div>
         </div>
     );
 }
+
