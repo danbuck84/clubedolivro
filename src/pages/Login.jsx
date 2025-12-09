@@ -44,7 +44,7 @@ const Login = () => {
                         className="w-full bg-white text-stone-700 font-sans font-bold py-4 px-6 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 border border-stone-200 flex items-center justify-center group active:scale-95"
                     >
                         <img
-                            src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+                            src="https://www.svgrepo.com/show/475656/google-color.svg"
                             alt="G"
                             className="w-5 h-5 mr-3 group-hover:scale-110 transition-transform"
                         />

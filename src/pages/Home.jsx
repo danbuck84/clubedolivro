@@ -38,10 +38,9 @@ const Home = () => {
                     <div className="absolute top-0 right-0 w-32 h-32 bg-brand-50 rounded-bl-full -mr-10 -mt-10 opacity-50"></div>
 
                     <img
-                        src="https://books.google.com.br/books/publisher/content?id=eZpXDwAAQBAJ&pg=PP1&img=1&zoom=3&hl=en&bul=1&sig=ACfU3U1oXk4HwQfLgQ_LwE_kXQ_XQ"
+                        src="https://placehold.co/400x600/ed943f/white?text=Capa+Livro"
                         alt="O Nome do Vento"
                         className="w-24 h-36 rounded-lg shadow-lg object-cover flex-shrink-0 z-10 rotate-1 group-hover:rotate-0 transition-transform duration-300"
-                        onError={(e) => { e.target.src = 'https://via.placeholder.com/150x225/d47321/fff?text=Livro' }}
                     />
                     <div className="flex-grow z-10 flex flex-col justify-between py-1">
                         <div>
@@ -99,7 +98,7 @@ const Home = () => {
                         <div className="flex -space-x-3">
                             {[1, 2, 3].map(i => (
                                 <div key={i} className="w-8 h-8 rounded-full border-2 border-white bg-stone-200 overflow-hidden">
-                                    <img src={`https://ui-avatars.com/api/?background=random&name=${i}`} alt="" />
+                                    <img src={`https://ui-avatars.com/api/?name=User+${i}&background=ffb56b&color=fff`} alt="" />
                                 </div>
                             ))}
                             <div className="w-8 h-8 rounded-full border-2 border-white bg-stone-900 text-white flex items-center justify-center text-xs font-bold">
