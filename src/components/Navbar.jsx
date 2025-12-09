@@ -1,71 +1,44 @@
 // Navbar.jsx
-// Bottom Tab Bar para navegação mobile-first
+// Barra de navegação flutuante estilo NanoBanana
 
-import { Home, BookMarked, Users, User } from 'lucide-react';
-import { useLocation, Link } from 'react-router-dom';
+import React from 'react';
+import { Home, BookOpen, Calendar, User } from 'lucide-react';
+import { useNavigate, useLocation } from 'react-router-dom';
 
-export default function Navbar() {
+const Navbar = () => {
+    const navigate = useNavigate();
     const location = useLocation();
+    const activeTab = location.pathname;
 
     const navItems = [
-        {
-            name: 'Home',
-            path: '/',
-            icon: Home,
-        },
-        {
-            name: 'Estante',
-            path: '/estante',
-            icon: BookMarked,
-        },
-        {
-            name: 'Encontros',
-            path: '/encontros',
-            icon: Users,
-        },
-        {
-            name: 'Perfil',
-            path: '/perfil',
-            icon: User,
-        },
+        { path: '/', icon: Home, label: 'Home' },
+        { path: '/estante', icon: BookOpen, label: 'Estante' },
+        { path: '/encontros', icon: Calendar, label: 'Encontros' },
+        { path: '/perfil', icon: User, label: 'Perfil' },
     ];
 
     return (
-        <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-stone-200 backdrop-blur-lg bg-white/95 z-50 safe-area-bottom">
-            <div className="max-w-lg mx-auto px-4">
-                <div className="flex items-center justify-around py-3">
-                    {navItems.map((item) => {
-                        const Icon = item.icon;
-                        const isActive = location.pathname === item.path;
-
-                        return (
-                            <Link
-                                key={item.path}
-                                to={item.path}
-                                className={`flex flex-col items-center gap-1 px-4 py-2 rounded-xl transition-all ${isActive
-                                        ? 'text-amber-600'
-                                        : 'text-stone-400 hover:text-stone-600'
-                                    }`}
-                            >
-                                <Icon
-                                    className={`w-6 h-6 transition-transform ${isActive ? 'scale-110' : ''
-                                        }`}
-                                    strokeWidth={isActive ? 2.5 : 2}
-                                />
-                                <span
-                                    className={`text-xs font-medium ${isActive ? 'font-semibold' : ''
-                                        }`}
-                                >
-                                    {item.name}
-                                </span>
-                                {isActive && (
-                                    <div className="absolute -bottom-0 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-amber-600 rounded-full" />
-                                )}
-                            </Link>
-                        );
-                    })}
-                </div>
+        <nav className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-full max-w-sm px-4">
+            <div className="bg-white/90 backdrop-blur-md rounded-full shadow-xl border border-stone-200/50 p-2 flex justify-between items-center px-6">
+                {navItems.map((item) => (
+                    <button
+                        key={item.path}
+                        onClick={() => navigate(item.path)}
+                        className={`flex flex-col items-center justify-center p-2 rounded-full transition-all duration-300 relative group
+                        ${activeTab === item.path ? 'text-brand-700' : 'text-stone-400 hover:text-brand-600'}`}
+                    >
+                        <item.icon
+                            className={`w-6 h-6 transition-transform duration-300 ${activeTab === item.path ? 'scale-110 fill-brand-100' : 'group-hover:scale-105'}`}
+                            strokeWidth={activeTab === item.path ? 2.5 : 2}
+                        />
+                        {activeTab === item.path && (
+                            <span className="absolute -bottom-1 w-1 h-1 bg-brand-600 rounded-full"></span>
+                        )}
+                    </button>
+                ))}
             </div>
         </nav>
     );
-}
+};
+
+export default Navbar;
