@@ -10,7 +10,7 @@ export function cn(...inputs: ClassValue[]) {
  * Prevents mixed content warnings
  */
 export function toHttps(url: string | undefined): string {
-  if (!url) return "/placeholder-book.jpg";
+  if (!url) return "https://placehold.co/400x600?text=Sem+Capa";
   if (url.startsWith("https://")) return url;
   return url.replace("http://", "https://");
 }
