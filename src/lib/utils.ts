@@ -14,3 +14,29 @@ export function toHttps(url: string | undefined): string {
   if (url.startsWith("https://")) return url;
   return url.replace("http://", "https://");
 }
+
+/**
+ * Formats Firestore Timestamp for datetime-local input
+ * Adjusts timezone offset to maintain visual time consistency
+ */
+export function formatForInput(timestamp: any): string {
+  if (!timestamp || !timestamp.toDate) return "";
+
+  const date = timestamp.toDate();
+  // Adjust offset to keep the time visually the same as saved
+  const offset = date.getTimezoneOffset() * 60000;
+  const localISOTime = new Date(date.getTime() - offset)
+    .toISOString()
+    .slice(0, 16);
+
+  return localISOTime;
+}
+
+/**
+ * Converts datetime-local input value to Date object
+ * Handles timezone properly for Firestore storage
+ */
+export function parseInputDate(dateTimeString: string): Date {
+  if (!dateTimeString) return new Date();
+  return new Date(dateTimeString);
+}
