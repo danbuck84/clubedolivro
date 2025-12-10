@@ -329,7 +329,7 @@ export default function Home() {
                                             className="flex items-center text-stone-500 hover:text-brand-600 text-sm mt-2 w-fit transition-colors"
                                         >
                                             <MapPin className="w-3.5 h-3.5 mr-1.5" />
-                                            <span className="underline decoration-dotted">{nextMeeting.locationName}</span>
+                                            <span className="hover:underline decoration-brand-500 underline-offset-2">{nextMeeting.locationName}</span>
                                             <span className="mx-1.5">•</span>
                                             <span>{nextMeeting.time}</span>
                                         </a>
@@ -361,9 +361,9 @@ export default function Home() {
                             </div>
                             <button
                                 onClick={handleRSVP}
-                                className={`w-full py-2 rounded-lg font-medium text-sm transition-colors ${hasUserRSVP(nextMeeting, user?.uid)
-                                    ? 'bg-green-50 text-green-700 border-2 border-green-200 hover:bg-green-100'
-                                    : 'bg-brand-700 text-white hover:bg-brand-800'
+                                className={`w-full py-3 rounded-xl font-bold transition-colors shadow-md ${hasUserRSVP(nextMeeting, user?.uid)
+                                        ? 'bg-green-50 text-green-700 border-2 border-green-200 hover:bg-green-100'
+                                        : 'bg-brand-600 text-white hover:bg-brand-700'
                                     }`}
                             >
                                 {hasUserRSVP(nextMeeting, user?.uid) ? '✓ Confirmado' : 'Eu vou!'}

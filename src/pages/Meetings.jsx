@@ -117,7 +117,7 @@ export default function Meetings() {
                                     <div className="p-5">
                                         <div className="flex gap-4">
                                             {/* Data Badge */}
-                                            <div className="flex flex-col items-center bg-brand-50 rounded-xl p-3 border border-brand-100 min-w-[70px]">
+                                            <div className="flex flex-col items-center justify-center bg-brand-50 rounded-xl p-3 border border-brand-100 min-w-[70px]">
                                                 <span className="text-brand-800 font-bold text-3xl font-serif leading-none">
                                                     {format(meetingDate, 'dd', { locale: ptBR })}
                                                 </span>
@@ -135,7 +135,7 @@ export default function Meetings() {
                                                     {activeTab === 'upcoming' && (
                                                         <button
                                                             onClick={() => navigate(`/encontros/editar/${meeting.id}`)}
-                                                            className="p-1.5 rounded-lg text-stone-400 hover:text-brand-600 hover:bg-stone-50 transition-colors"
+                                                            className="p-2 rounded-lg text-stone-400 hover:text-brand-600 hover:bg-stone-50 transition-colors flex-shrink-0"
                                                             title="Editar encontro"
                                                         >
                                                             <Edit2 className="w-4 h-4" />
@@ -156,7 +156,7 @@ export default function Meetings() {
                                                             className="flex items-center gap-2 text-stone-600 hover:text-brand-600 transition-colors w-fit"
                                                         >
                                                             <MapPin className="w-4 h-4" />
-                                                            <span className="underline decoration-dotted">{meeting.locationName}</span>
+                                                            <span className="hover:underline decoration-brand-500 underline-offset-2">{meeting.locationName}</span>
                                                             <ExternalLink className="w-3 h-3" />
                                                         </a>
                                                     ) : (

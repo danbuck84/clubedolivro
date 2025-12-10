@@ -116,7 +116,7 @@ export default function Profile() {
 
                 {/* Footer Info */}
                 <p className="text-center text-xs text-stone-400 mt-6">
-                    Clube do Livro • 2024
+                    Clube do Livro • desde 2023
                 </p>
             </div>
         </div>
