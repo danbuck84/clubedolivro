@@ -23,7 +23,10 @@ const Navbar = () => {
                 {navItems.map((item) => (
                     <button
                         key={item.path}
-                        onClick={() => navigate(item.path)}
+                        onClick={() => {
+                            console.log("Navegando para:", item.path);
+                            navigate(item.path);
+                        }}
                         className={`flex flex-col items-center justify-center p-2 rounded-full transition-all duration-300 relative group
                         ${activeTab === item.path ? 'text-brand-700' : 'text-stone-400 hover:text-brand-600'}`}
                     >
