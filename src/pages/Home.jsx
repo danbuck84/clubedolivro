@@ -171,9 +171,9 @@ export default function Home() {
                                         <span>Página {currentBook.progress || 0}</span>
                                         <span className="text-stone-400">de {currentBook.pageCount}</span>
                                     </div>
-                                    <div className="w-full bg-stone-100 rounded-full h-2">
+                                    <div className="w-full bg-stone-200 rounded-full h-3 mt-2 overflow-hidden">
                                         <div
-                                            className="bg-gradient-to-r from-brand-400 to-brand-600 h-2 rounded-full transition-all duration-500"
+                                            className="bg-gradient-to-r from-amber-500 to-orange-600 h-full rounded-full transition-all duration-500 ease-out"
                                             style={{ width: `${Math.min(((currentBook.progress || 0) / currentBook.pageCount) * 100, 100)}%` }}
                                         ></div>
                                     </div>
@@ -362,8 +362,8 @@ export default function Home() {
                             <button
                                 onClick={handleRSVP}
                                 className={`w-full mt-4 py-3 rounded-xl font-bold shadow-sm transition-colors ${hasUserRSVP(nextMeeting, user?.uid)
-                                        ? 'bg-green-50 text-green-700 border-2 border-green-200 hover:bg-green-100'
-                                        : 'bg-brand-600 text-white hover:bg-brand-700'
+                                    ? 'bg-green-50 text-green-700 border-2 border-green-200 hover:bg-green-100'
+                                    : 'bg-brand-600 text-white hover:bg-brand-700'
                                     }`}
                             >
                                 {hasUserRSVP(nextMeeting, user?.uid) ? '✓ Confirmado' : 'Eu vou!'}

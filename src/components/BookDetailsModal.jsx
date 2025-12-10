@@ -188,8 +188,8 @@ export default function BookDetailsModal({ book, onClose, onUpdate }) {
                                         onClick={() => handleStatusChange(option.value)}
                                         disabled={loading || deleting}
                                         className={`flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg font-medium transition-all border-2 text-sm ${status === option.value
-                                                ? 'bg-brand-50 border-brand-300 text-brand-700'
-                                                : 'bg-stone-50 border-stone-200 text-stone-600 hover:bg-stone-100'
+                                            ? 'bg-brand-50 border-brand-300 text-brand-700'
+                                            : 'bg-stone-50 border-stone-200 text-stone-600 hover:bg-stone-100'
                                             } disabled:opacity-50`}
                                     >
                                         <span className="text-base">{option.emoji}</span>
@@ -231,9 +231,9 @@ export default function BookDetailsModal({ book, onClose, onUpdate }) {
                                     <div className="flex justify-between text-xs text-stone-600 mb-1">
                                         <span>{Math.round(((parseInt(progress) || 0) / book.pageCount) * 100)}% concluído</span>
                                     </div>
-                                    <div className="w-full bg-stone-100 rounded-full h-1.5">
+                                    <div className="w-full bg-stone-200 rounded-full h-1.5 overflow-hidden">
                                         <div
-                                            className="bg-gradient-to-r from-brand-400 to-brand-600 h-1.5 rounded-full transition-all duration-300"
+                                            className="bg-gradient-to-r from-amber-500 to-orange-600 h-full rounded-full transition-all duration-300 ease-out"
                                             style={{ width: `${Math.min(((parseInt(progress) || 0) / book.pageCount) * 100, 100)}%` }}
                                         ></div>
                                     </div>

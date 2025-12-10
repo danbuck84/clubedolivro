@@ -57,7 +57,7 @@ export default function MyShelf() {
                         <button
                             key={tab.value}
                             onClick={() => setActiveTab(tab.value)}
-                            className={`flex-1 py-3 px-4 font-medium transition-all relative ${activeTab === tab.value
+                            className={`flex-1 py-3 px-4 font-medium transition-all relative whitespace-nowrap ${activeTab === tab.value
                                 ? 'text-brand-700 border-b-2 border-brand-600 -mb-0.5'
                                 : 'text-stone-500 hover:text-stone-700'
                                 }`}
@@ -116,9 +116,9 @@ export default function MyShelf() {
                                             <span>Pág. {book.progress || 0}</span>
                                             <span className="text-stone-400">de {book.pageCount}</span>
                                         </div>
-                                        <div className="w-full bg-stone-100 rounded-full h-1.5">
+                                        <div className="w-full bg-stone-200 rounded-full h-1.5 overflow-hidden">
                                             <div
-                                                className="bg-gradient-to-r from-brand-400 to-brand-600 h-1.5 rounded-full transition-all"
+                                                className="bg-gradient-to-r from-amber-500 to-orange-600 h-full rounded-full transition-all ease-out"
                                                 style={{ width: `${Math.min((book.progress / book.pageCount) * 100, 100)}%` }}
                                             ></div>
                                         </div>
