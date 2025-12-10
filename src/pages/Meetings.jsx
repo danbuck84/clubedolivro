@@ -117,11 +117,11 @@ export default function Meetings() {
                                     <div className="p-5">
                                         <div className="flex gap-4">
                                             {/* Data Badge */}
-                                            <div className="flex flex-col items-center justify-center bg-brand-50 rounded-xl p-3 border border-brand-100 min-w-[70px]">
-                                                <span className="text-brand-800 font-bold text-3xl font-serif leading-none">
+                                            <div className="flex flex-col items-center justify-center bg-stone-100 rounded-xl p-2 w-16 h-16 shrink-0 border border-stone-200">
+                                                <span className="text-2xl font-serif font-bold text-brand-700 leading-none">
                                                     {format(meetingDate, 'dd', { locale: ptBR })}
                                                 </span>
-                                                <span className="text-brand-600 text-xs font-bold uppercase tracking-wider mt-1">
+                                                <span className="text-[10px] uppercase font-bold text-stone-500 tracking-wider mt-1">
                                                     {format(meetingDate, 'MMM', { locale: ptBR })}
                                                 </span>
                                             </div>

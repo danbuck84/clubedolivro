@@ -345,7 +345,7 @@ export default function Home() {
 
                         <div className="bg-stone-50/50 p-4 border-t border-stone-100">
                             <div className="flex items-center justify-between mb-3">
-                                <span className="text-xs font-medium text-stone-500">Quem vai:</span>
+                                <span className="text-xs font-medium text-stone-900">Quem vai:</span>
                                 <div className="flex -space-x-3">
                                     {Object.values(nextMeeting.rsvps || {}).slice(0, 3).map((rsvp, idx) => (
                                         <div key={idx} className="w-8 h-8 rounded-full border-2 border-white bg-stone-200 overflow-hidden">
@@ -361,7 +361,7 @@ export default function Home() {
                             </div>
                             <button
                                 onClick={handleRSVP}
-                                className={`w-full py-3 rounded-xl font-bold transition-colors shadow-md ${hasUserRSVP(nextMeeting, user?.uid)
+                                className={`w-full mt-4 py-3 rounded-xl font-bold shadow-sm transition-colors ${hasUserRSVP(nextMeeting, user?.uid)
                                         ? 'bg-green-50 text-green-700 border-2 border-green-200 hover:bg-green-100'
                                         : 'bg-brand-600 text-white hover:bg-brand-700'
                                     }`}

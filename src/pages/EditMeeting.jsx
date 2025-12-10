@@ -219,7 +219,7 @@ export default function EditMeeting() {
                         <button
                             type="submit"
                             disabled={saving}
-                            className="flex-1 py-3 px-4 bg-brand-600 text-white font-bold rounded-xl hover:bg-brand-700 transition-colors disabled:opacity-50 shadow-md flex items-center justify-center gap-2"
+                            className="flex-1 py-3 px-6 bg-brand-600 text-white font-bold rounded-xl hover:bg-brand-700 transition-colors disabled:opacity-50 shadow-md flex items-center justify-center gap-2"
                         >
                             {saving ? (
                                 <>
