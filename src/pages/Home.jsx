@@ -363,7 +363,7 @@ export default function Home() {
                                 onClick={handleRSVP}
                                 className={`w-full mt-4 py-3 rounded-xl font-bold shadow-sm transition-colors ${hasUserRSVP(nextMeeting, user?.uid)
                                     ? 'bg-green-50 text-green-700 border-2 border-green-200 hover:bg-green-100'
-                                    : 'bg-brand-600 text-white hover:bg-brand-700'
+                                    : 'bg-orange-600 text-white hover:bg-orange-700'
                                     }`}
                             >
                                 {hasUserRSVP(nextMeeting, user?.uid) ? '✓ Confirmado' : 'Eu vou!'}

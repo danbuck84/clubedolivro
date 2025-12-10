@@ -220,7 +220,7 @@ export default function BookDetailsModal({ book, onClose, onUpdate }) {
                                     <button
                                         onClick={handleProgressUpdate}
                                         disabled={loading || deleting || progress == book.progress}
-                                        className="ml-auto px-3 py-1.5 bg-brand-700 text-white font-medium rounded-lg hover:bg-brand-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-xs"
+                                        className="ml-auto px-3 py-1.5 bg-orange-600 text-white font-medium rounded-lg hover:bg-orange-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-xs"
                                     >
                                         {loading ? <Loader2 className="w-3 h-3 animate-spin" /> : 'Salvar'}
                                     </button>
