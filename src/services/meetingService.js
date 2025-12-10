@@ -153,3 +153,47 @@ export function countRSVPs(meeting) {
     if (!meeting || !meeting.rsvps) return 0;
     return Object.keys(meeting.rsvps).length;
 }
+
+/**
+ * Busca um encontro específico por ID
+ * @param {string} meetingId - ID do encontro
+ * @returns {Promise<Object>} Dados do encontro
+ */
+export async function getMeetingById(meetingId) {
+    try {
+        const meetingRef = doc(db, 'meetings', meetingId);
+        const meetingSnap = await getDoc(meetingRef);
+
+        if (!meetingSnap.exists()) {
+            throw new Error('Encontro não encontrado');
+        }
+
+        return {
+            id: meetingSnap.id,
+            ...meetingSnap.data()
+        };
+    } catch (error) {
+        console.error('Erro ao buscar encontro:', error);
+        throw error;
+    }
+}
+
+/**
+ * Atualiza um encontro existente
+ * @param {string} meetingId - ID do encontro
+ * @param {Object} updates - Dados a atualizar
+ * @returns {Promise<void>}
+ */
+export async function updateMeeting(meetingId, updates) {
+    try {
+        const meetingRef = doc(db, 'meetings', meetingId);
+
+        await updateDoc(meetingRef, {
+            ...updates,
+            updatedAt: serverTimestamp()
+        });
+    } catch (error) {
+        console.error('Erro ao atualizar encontro:', error);
+        throw error;
+    }
+}

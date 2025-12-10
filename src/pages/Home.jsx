@@ -8,7 +8,7 @@ import { getUserLibrary, updateBookProgress } from '../services/shelfService';
 import { getNextMeeting, toggleRSVP, hasUserRSVP, countRSVPs } from '../services/meetingService';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-import { BookOpen, Loader2, Calendar, MapPin, Users, Plus } from 'lucide-react';
+import { BookOpen, Loader2, Calendar, MapPin, Users, Plus, Edit2 } from 'lucide-react';
 
 export default function Home() {
     const { user } = useAuth();
@@ -309,13 +309,36 @@ export default function Home() {
                                     </span>
                                 </div>
                                 <div className="ml-4 flex-grow">
-                                    <h3 className="font-serif text-lg font-bold text-stone-900">
-                                        {nextMeeting.bookTitle || 'Encontro do Clube'}
-                                    </h3>
-                                    <div className="flex items-center text-stone-500 text-sm mt-2">
-                                        <span className="w-2 h-2 rounded-full bg-green-500 mr-2"></span>
-                                        {nextMeeting.locationName} • {nextMeeting.time}
+                                    <div className="flex items-center justify-between mb-1">
+                                        <h3 className="font-serif text-lg font-bold text-stone-900">
+                                            {nextMeeting.bookTitle || 'Encontro do Clube'}
+                                        </h3>
+                                        <button
+                                            onClick={() => navigate(`/encontros/editar/${nextMeeting.id}`)}
+                                            className="p-1.5 rounded-lg text-stone-400 hover:text-brand-600 hover:bg-stone-50 transition-colors"
+                                            title="Editar encontro"
+                                        >
+                                            <Edit2 className="w-4 h-4" />
+                                        </button>
                                     </div>
+                                    {nextMeeting.locationLink ? (
+                                        <a
+                                            href={nextMeeting.locationLink}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="flex items-center text-stone-500 hover:text-brand-600 text-sm mt-2 w-fit transition-colors"
+                                        >
+                                            <MapPin className="w-3.5 h-3.5 mr-1.5" />
+                                            <span className="underline decoration-dotted">{nextMeeting.locationName}</span>
+                                            <span className="mx-1.5">•</span>
+                                            <span>{nextMeeting.time}</span>
+                                        </a>
+                                    ) : (
+                                        <div className="flex items-center text-stone-500 text-sm mt-2">
+                                            <span className="w-2 h-2 rounded-full bg-green-500 mr-2"></span>
+                                            {nextMeeting.locationName} • {nextMeeting.time}
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -339,8 +362,8 @@ export default function Home() {
                             <button
                                 onClick={handleRSVP}
                                 className={`w-full py-2 rounded-lg font-medium text-sm transition-colors ${hasUserRSVP(nextMeeting, user?.uid)
-                                        ? 'bg-green-50 text-green-700 border-2 border-green-200 hover:bg-green-100'
-                                        : 'bg-brand-700 text-white hover:bg-brand-800'
+                                    ? 'bg-green-50 text-green-700 border-2 border-green-200 hover:bg-green-100'
+                                    : 'bg-brand-700 text-white hover:bg-brand-800'
                                     }`}
                             >
                                 {hasUserRSVP(nextMeeting, user?.uid) ? '✓ Confirmado' : 'Eu vou!'}

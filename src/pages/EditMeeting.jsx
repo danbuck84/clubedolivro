@@ -1,14 +1,15 @@
-// CreateMeeting.jsx
-// Página de agendamento de encontros
+// EditMeeting.jsx
+// Página de edição de encontros
 
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { createMeeting } from '../services/meetingService';
+import { getMeetingById, updateMeeting } from '../services/meetingService';
 import { Timestamp } from 'firebase/firestore';
 import { Calendar, MapPin, Link as LinkIcon, BookOpen, Loader2 } from 'lucide-react';
 
-export default function CreateMeeting() {
+export default function EditMeeting() {
+    const { id } = useParams();
     const { user } = useAuth();
     const navigate = useNavigate();
 
@@ -19,8 +20,35 @@ export default function CreateMeeting() {
         bookTitle: ''
     });
 
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [saving, setSaving] = useState(false);
     const [error, setError] = useState('');
+
+    useEffect(() => {
+        async function loadMeeting() {
+            try {
+                const meeting = await getMeetingById(id);
+
+                // Converter Timestamp para datetime-local
+                const date = meeting.date.toDate();
+                const datetime = date.toISOString().slice(0, 16); // YYYY-MM-DDTHH:mm
+
+                setFormData({
+                    datetime,
+                    locationName: meeting.locationName || '',
+                    locationLink: meeting.locationLink || '',
+                    bookTitle: meeting.bookTitle || ''
+                });
+            } catch (err) {
+                console.error('Erro ao carregar encontro:', err);
+                setError('Erro ao carregar encontro');
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        loadMeeting();
+    }, [id]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -49,7 +77,7 @@ export default function CreateMeeting() {
             return;
         }
 
-        setLoading(true);
+        setSaving(true);
 
         try {
             // Separar data e hora
@@ -57,22 +85,21 @@ export default function CreateMeeting() {
             const date = Timestamp.fromDate(dateObj);
             const time = dateObj.toTimeString().substring(0, 5); // HH:mm
 
-            await createMeeting({
+            await updateMeeting(id, {
                 date,
                 time,
                 locationName: formData.locationName.trim(),
                 locationLink: formData.locationLink.trim(),
-                bookTitle: formData.bookTitle.trim(),
-                createdBy: user.uid
+                bookTitle: formData.bookTitle.trim()
             });
 
-            // Redirecionar para home
-            navigate('/');
+            // Redirecionar para encontros
+            navigate('/encontros');
         } catch (err) {
-            console.error('Erro ao criar encontro:', err);
-            setError('Erro ao criar encontro. Tente novamente.');
+            console.error('Erro ao atualizar encontro:', err);
+            setError('Erro ao atualizar encontro. Tente novamente.');
         } finally {
-            setLoading(false);
+            setSaving(false);
         }
     };
 
@@ -83,16 +110,24 @@ export default function CreateMeeting() {
         });
     };
 
+    if (loading) {
+        return (
+            <div className="min-h-screen bg-stone-50 text-stone-900 font-sans p-6 pb-28 flex items-center justify-center">
+                <Loader2 className="w-10 h-10 text-brand-600 animate-spin" />
+            </div>
+        );
+    }
+
     return (
         <div className="min-h-screen bg-stone-50 text-stone-900 font-sans p-6 pb-28">
             <div className="max-w-2xl mx-auto">
                 {/* Header */}
                 <header className="mb-8">
                     <h1 className="font-serif text-4xl font-bold text-stone-900 mb-2 text-center">
-                        Agendar Encontro
+                        Editar Encontro
                     </h1>
                     <p className="text-stone-500 text-center">
-                        Organize o próximo encontro do clube
+                        Atualize as informações do encontro
                     </p>
                 </header>
 
@@ -176,23 +211,23 @@ export default function CreateMeeting() {
                         <button
                             type="button"
                             onClick={() => navigate(-1)}
-                            disabled={loading}
+                            disabled={saving}
                             className="flex-1 py-3 px-4 border-2 border-stone-200 text-stone-700 font-medium rounded-xl hover:bg-stone-50 transition-colors disabled:opacity-50"
                         >
                             Cancelar
                         </button>
                         <button
                             type="submit"
-                            disabled={loading}
+                            disabled={saving}
                             className="flex-1 py-3 px-4 bg-brand-600 text-white font-bold rounded-xl hover:bg-brand-700 transition-colors disabled:opacity-50 shadow-md flex items-center justify-center gap-2"
                         >
-                            {loading ? (
+                            {saving ? (
                                 <>
                                     <Loader2 className="w-5 h-5 animate-spin" />
-                                    Agendando...
+                                    Salvando...
                                 </>
                             ) : (
-                                'Agendar Encontro'
+                                'Salvar Alterações'
                             )}
                         </button>
                     </div>

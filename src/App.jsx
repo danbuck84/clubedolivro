@@ -11,6 +11,7 @@ import Search from './pages/Search';
 import MyShelf from './pages/MyShelf';
 import Profile from './pages/Profile';
 import CreateMeeting from './pages/CreateMeeting';
+import EditMeeting from './pages/EditMeeting';
 import Meetings from './pages/Meetings';
 
 // Layout wrapper para rotas protegidas (com Navbar)
@@ -93,6 +94,17 @@ function App() {
               <ProtectedRoute>
                 <ProtectedLayout>
                   <Meetings />
+                </ProtectedLayout>
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/encontros/editar/:id"
+            element={
+              <ProtectedRoute>
+                <ProtectedLayout>
+                  <EditMeeting />
                 </ProtectedLayout>
               </ProtectedRoute>
             }

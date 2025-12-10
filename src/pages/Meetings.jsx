@@ -7,7 +7,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { getAllMeetings, toggleRSVP, hasUserRSVP, countRSVPs } from '../services/meetingService';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-import { Loader2, Calendar, MapPin, Users, Plus, ExternalLink } from 'lucide-react';
+import { Loader2, Calendar, MapPin, Users, Plus, ExternalLink, Edit2 } from 'lucide-react';
 
 export default function Meetings() {
     const { user } = useAuth();
@@ -77,8 +77,8 @@ export default function Meetings() {
                         <button
                             onClick={() => setActiveTab('upcoming')}
                             className={`flex-1 py-3 px-4 font-medium transition-all relative ${activeTab === 'upcoming'
-                                    ? 'text-brand-700 border-b-2 border-brand-600 -mb-0.5'
-                                    : 'text-stone-500 hover:text-stone-700'
+                                ? 'text-brand-700 border-b-2 border-brand-600 -mb-0.5'
+                                : 'text-stone-500 hover:text-stone-700'
                                 }`}
                         >
                             📅 Próximos ({upcomingMeetings.length})
@@ -86,8 +86,8 @@ export default function Meetings() {
                         <button
                             onClick={() => setActiveTab('past')}
                             className={`flex-1 py-3 px-4 font-medium transition-all relative ${activeTab === 'past'
-                                    ? 'text-brand-700 border-b-2 border-brand-600 -mb-0.5'
-                                    : 'text-stone-500 hover:text-stone-700'
+                                ? 'text-brand-700 border-b-2 border-brand-600 -mb-0.5'
+                                : 'text-stone-500 hover:text-stone-700'
                                 }`}
                         >
                             📚 Passados ({pastMeetings.length})
@@ -128,29 +128,43 @@ export default function Meetings() {
 
                                             {/* Informações */}
                                             <div className="flex-grow">
-                                                <h3 className="font-serif text-lg font-bold text-stone-900 mb-1">
-                                                    {meeting.bookTitle || 'Encontro do Clube'}
-                                                </h3>
+                                                <div className="flex items-center justify-between mb-1">
+                                                    <h3 className="font-serif text-lg font-bold text-stone-900">
+                                                        {meeting.bookTitle || 'Encontro do Clube'}
+                                                    </h3>
+                                                    {activeTab === 'upcoming' && (
+                                                        <button
+                                                            onClick={() => navigate(`/encontros/editar/${meeting.id}`)}
+                                                            className="p-1.5 rounded-lg text-stone-400 hover:text-brand-600 hover:bg-stone-50 transition-colors"
+                                                            title="Editar encontro"
+                                                        >
+                                                            <Edit2 className="w-4 h-4" />
+                                                        </button>
+                                                    )}
+                                                </div>
 
                                                 <div className="space-y-1 text-sm text-stone-600 mb-3">
                                                     <div className="flex items-center gap-2">
                                                         <Calendar className="w-4 h-4" />
                                                         {format(meetingDate, "dd 'de' MMMM 'às' HH:mm", { locale: ptBR })}
                                                     </div>
-                                                    <div className="flex items-center gap-2">
-                                                        <MapPin className="w-4 h-4" />
-                                                        {meeting.locationName}
-                                                        {meeting.locationLink && (
-                                                            <a
-                                                                href={meeting.locationLink}
-                                                                target="_blank"
-                                                                rel="noopener noreferrer"
-                                                                className="text-brand-600 hover:text-brand-700"
-                                                            >
-                                                                <ExternalLink className="w-3 h-3" />
-                                                            </a>
-                                                        )}
-                                                    </div>
+                                                    {meeting.locationLink ? (
+                                                        <a
+                                                            href={meeting.locationLink}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="flex items-center gap-2 text-stone-600 hover:text-brand-600 transition-colors w-fit"
+                                                        >
+                                                            <MapPin className="w-4 h-4" />
+                                                            <span className="underline decoration-dotted">{meeting.locationName}</span>
+                                                            <ExternalLink className="w-3 h-3" />
+                                                        </a>
+                                                    ) : (
+                                                        <div className="flex items-center gap-2">
+                                                            <MapPin className="w-4 h-4" />
+                                                            {meeting.locationName}
+                                                        </div>
+                                                    )}
                                                     <div className="flex items-center gap-2">
                                                         <Users className="w-4 h-4" />
                                                         {rsvpCount} {rsvpCount === 1 ? 'confirmação' : 'confirmações'}
@@ -178,8 +192,8 @@ export default function Meetings() {
                                                     <button
                                                         onClick={() => handleRSVP(meeting.id)}
                                                         className={`px-4 py-2 rounded-lg font-medium text-sm transition-colors ${isUserGoing
-                                                                ? 'bg-green-50 text-green-700 border-2 border-green-200 hover:bg-green-100'
-                                                                : 'bg-brand-50 text-brand-700 border-2 border-brand-200 hover:bg-brand-100'
+                                                            ? 'bg-green-50 text-green-700 border-2 border-green-200 hover:bg-green-100'
+                                                            : 'bg-brand-50 text-brand-700 border-2 border-brand-200 hover:bg-brand-100'
                                                             }`}
                                                     >
                                                         {isUserGoing ? '✓ Confirmado' : 'Eu vou!'}
