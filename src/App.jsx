@@ -10,6 +10,8 @@ import Home from './pages/Home';
 import Search from './pages/Search';
 import MyShelf from './pages/MyShelf';
 import Profile from './pages/Profile';
+import CreateMeeting from './pages/CreateMeeting';
+import Meetings from './pages/Meetings';
 
 // Layout wrapper para rotas protegidas (com Navbar)
 function ProtectedLayout({ children }) {
@@ -69,6 +71,28 @@ function App() {
               <ProtectedRoute>
                 <ProtectedLayout>
                   <Profile />
+                </ProtectedLayout>
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/agendar"
+            element={
+              <ProtectedRoute>
+                <ProtectedLayout>
+                  <CreateMeeting />
+                </ProtectedLayout>
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/encontros"
+            element={
+              <ProtectedRoute>
+                <ProtectedLayout>
+                  <Meetings />
                 </ProtectedLayout>
               </ProtectedRoute>
             }

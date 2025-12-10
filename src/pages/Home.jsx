@@ -5,7 +5,10 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { getUserLibrary, updateBookProgress } from '../services/shelfService';
-import { BookOpen, Loader2 } from 'lucide-react';
+import { getNextMeeting, toggleRSVP, hasUserRSVP, countRSVPs } from '../services/meetingService';
+import { format } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
+import { BookOpen, Loader2, Calendar, MapPin, Users, Plus } from 'lucide-react';
 
 export default function Home() {
     const { user } = useAuth();
@@ -15,6 +18,8 @@ export default function Home() {
     const [showProgressModal, setShowProgressModal] = useState(false);
     const [newProgress, setNewProgress] = useState('');
     const [updatingProgress, setUpdatingProgress] = useState(false);
+    const [nextMeeting, setNextMeeting] = useState(null);
+    const [loadingMeeting, setLoadingMeeting] = useState(true);
 
     useEffect(() => {
         async function loadCurrentBook() {
@@ -39,6 +44,21 @@ export default function Home() {
 
         loadCurrentBook();
     }, [user]);
+
+    useEffect(() => {
+        async function loadMeeting() {
+            try {
+                const meeting = await getNextMeeting();
+                setNextMeeting(meeting);
+            } catch (error) {
+                console.error('Erro ao carregar encontro:', error);
+            } finally {
+                setLoadingMeeting(false);
+            }
+        }
+
+        loadMeeting();
+    }, []);
 
     const handleUpdateProgress = async () => {
         if (!currentBook || !user) return;
@@ -68,6 +88,23 @@ export default function Home() {
             alert('Erro ao atualizar progresso. Tente novamente.');
         } finally {
             setUpdatingProgress(false);
+        }
+    };
+
+    const handleRSVP = async () => {
+        if (!nextMeeting || !user) return;
+
+        try {
+            await toggleRSVP(nextMeeting.id, user.uid, {
+                name: user.displayName,
+                photoURL: user.photoURL
+            });
+
+            // Recarregar encontro
+            const updatedMeeting = await getNextMeeting();
+            setNextMeeting(updatedMeeting);
+        } catch (error) {
+            console.error('Erro ao atualizar RSVP:', error);
         }
     };
 
@@ -246,44 +283,96 @@ export default function Home() {
                 </section>
             )}
 
-            {/* Seção "Próximo Encontro" (mantida estática por enquanto) */}
+            {/* Seção "Próximo Encontro" - Dinâmica */}
             <section>
                 <h2 className="text-xl font-serif font-bold text-stone-800 mb-4">Próximo Encontro</h2>
-                <div className="bg-white rounded-2xl shadow-sm border border-stone-100 relative overflow-hidden">
-                    <div className="absolute -left-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-stone-50 rounded-full border border-stone-100"></div>
-                    <div className="absolute -right-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-stone-50 rounded-full border border-stone-100"></div>
-                    <div className="absolute left-4 right-4 top-1/2 border-t-2 border-dashed border-stone-100"></div>
 
-                    <div className="p-5 pb-8">
-                        <div className="flex justify-between items-start">
-                            <div className="flex flex-col items-center bg-brand-50 rounded-xl p-3 border border-brand-100 min-w-[70px]">
-                                <span className="text-brand-800 font-bold text-3xl font-serif leading-none">15</span>
-                                <span className="text-brand-600 text-xs font-bold uppercase tracking-wider mt-1">Jan</span>
-                            </div>
-                            <div className="ml-4 flex-grow">
-                                <h3 className="font-serif text-lg font-bold text-stone-900">Debate: "O Conto da Aia"</h3>
-                                <div className="flex items-center text-stone-500 text-sm mt-2">
-                                    <span className="w-2 h-2 rounded-full bg-green-500 mr-2"></span>
-                                    Cafeteria Central • 19:00h
+                {loadingMeeting ? (
+                    <div className="bg-white rounded-2xl shadow-sm border border-stone-100 p-10 text-center">
+                        <Loader2 className="w-8 h-8 text-brand-600 animate-spin mx-auto" />
+                    </div>
+                ) : nextMeeting ? (
+                    /* Ticket com Dados Reais */
+                    <div className="bg-white rounded-2xl shadow-sm border border-stone-100 relative overflow-hidden">
+                        <div className="absolute -left-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-stone-50 rounded-full border border-stone-100"></div>
+                        <div className="absolute -right-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-stone-50 rounded-full border border-stone-100"></div>
+                        <div className="absolute left-4 right-4 top-1/2 border-t-2 border-dashed border-stone-100"></div>
+
+                        <div className="p-5 pb-8">
+                            <div className="flex justify-between items-start">
+                                <div className="flex flex-col items-center bg-brand-50 rounded-xl p-3 border border-brand-100 min-w-[70px]">
+                                    <span className="text-brand-800 font-bold text-3xl font-serif leading-none">
+                                        {format(nextMeeting.date.toDate(), 'dd', { locale: ptBR })}
+                                    </span>
+                                    <span className="text-brand-600 text-xs font-bold uppercase tracking-wider mt-1">
+                                        {format(nextMeeting.date.toDate(), 'MMM', { locale: ptBR })}
+                                    </span>
+                                </div>
+                                <div className="ml-4 flex-grow">
+                                    <h3 className="font-serif text-lg font-bold text-stone-900">
+                                        {nextMeeting.bookTitle || 'Encontro do Clube'}
+                                    </h3>
+                                    <div className="flex items-center text-stone-500 text-sm mt-2">
+                                        <span className="w-2 h-2 rounded-full bg-green-500 mr-2"></span>
+                                        {nextMeeting.locationName} • {nextMeeting.time}
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div className="bg-stone-50/50 p-4 flex items-center justify-between border-t border-stone-100">
-                        <span className="text-xs font-medium text-stone-500">Quem vai:</span>
-                        <div className="flex -space-x-3">
-                            {[1, 2, 3].map(i => (
-                                <div key={i} className="w-8 h-8 rounded-full border-2 border-white bg-stone-200 overflow-hidden">
-                                    <img src={`https://ui-avatars.com/api/?name=User+${i}&background=ffb56b&color=fff`} alt="" />
+                        <div className="bg-stone-50/50 p-4 border-t border-stone-100">
+                            <div className="flex items-center justify-between mb-3">
+                                <span className="text-xs font-medium text-stone-500">Quem vai:</span>
+                                <div className="flex -space-x-3">
+                                    {Object.values(nextMeeting.rsvps || {}).slice(0, 3).map((rsvp, idx) => (
+                                        <div key={idx} className="w-8 h-8 rounded-full border-2 border-white bg-stone-200 overflow-hidden">
+                                            <img src={rsvp.photoURL} alt={rsvp.name} />
+                                        </div>
+                                    ))}
+                                    {countRSVPs(nextMeeting) > 3 && (
+                                        <div className="w-8 h-8 rounded-full border-2 border-white bg-stone-900 text-white flex items-center justify-center text-xs font-bold">
+                                            +{countRSVPs(nextMeeting) - 3}
+                                        </div>
+                                    )}
                                 </div>
-                            ))}
-                            <div className="w-8 h-8 rounded-full border-2 border-white bg-stone-900 text-white flex items-center justify-center text-xs font-bold">
-                                +5
                             </div>
+                            <button
+                                onClick={handleRSVP}
+                                className={`w-full py-2 rounded-lg font-medium text-sm transition-colors ${hasUserRSVP(nextMeeting, user?.uid)
+                                        ? 'bg-green-50 text-green-700 border-2 border-green-200 hover:bg-green-100'
+                                        : 'bg-brand-700 text-white hover:bg-brand-800'
+                                    }`}
+                            >
+                                {hasUserRSVP(nextMeeting, user?.uid) ? '✓ Confirmado' : 'Eu vou!'}
+                            </button>
                         </div>
                     </div>
-                </div>
+                ) : (
+                    /* Empty State - Sem encontro marcado */
+                    <div className="bg-white rounded-2xl shadow-md p-8 text-center border border-stone-200">
+                        <div className="flex justify-center mb-4">
+                            <div className="bg-amber-50 p-6 rounded-2xl">
+                                <Calendar className="w-16 h-16 text-amber-600" strokeWidth={1.5} />
+                            </div>
+                        </div>
+
+                        <h3 className="text-2xl font-serif font-bold text-stone-900 mb-2">
+                            Nenhum encontro marcado
+                        </h3>
+
+                        <p className="text-stone-600 mb-6">
+                            Que tal agendar o próximo encontro do clube?
+                        </p>
+
+                        <button
+                            onClick={() => navigate('/agendar')}
+                            className="bg-brand-700 text-white px-6 py-3 rounded-xl font-medium hover:bg-brand-800 transition-colors shadow-sm inline-flex items-center gap-2"
+                        >
+                            <Plus className="w-5 h-5" />
+                            Agendar Encontro
+                        </button>
+                    </div>
+                )}
             </section>
         </div>
     );
