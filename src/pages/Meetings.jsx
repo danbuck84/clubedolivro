@@ -7,7 +7,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { getAllMeetings, toggleRSVP, hasUserRSVP, countRSVPs } from '../services/meetingService';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-import { Loader2, Calendar, MapPin, Users, Plus, ExternalLink, Edit2 } from 'lucide-react';
+import { Loader2, Calendar, MapPin, Users, Plus, ExternalLink, Edit2, Clock } from 'lucide-react';
 
 export default function Meetings() {
     const { user } = useAuth();
@@ -110,102 +110,104 @@ export default function Meetings() {
                             const rsvpList = Object.values(meeting.rsvps || {});
 
                             return (
-                                <div
-                                    key={meeting.id}
-                                    className="bg-white rounded-2xl shadow-sm border border-stone-100 overflow-hidden"
-                                >
-                                    <div className="p-5">
-                                        <div className="flex gap-4">
-                                            {/* Data Badge */}
-                                            <div className="flex flex-col items-center justify-center bg-stone-100 rounded-xl p-2 w-16 h-16 shrink-0 border border-stone-200">
-                                                <span className="text-2xl font-serif font-bold text-brand-700 leading-none">
-                                                    {format(meetingDate, 'dd', { locale: ptBR })}
-                                                </span>
-                                                <span className="text-[10px] uppercase font-bold text-stone-500 tracking-wider mt-1">
-                                                    {format(meetingDate, 'MMM', { locale: ptBR })}
-                                                </span>
-                                            </div>
+                                <div key={meeting.id} className="bg-white rounded-2xl shadow-sm border border-stone-100 overflow-hidden flex h-full hover:shadow-md transition-shadow">
+                                    {/* 1. Barra Lateral de Data */}
+                                    <div className="bg-brand-50/80 p-4 flex flex-col justify-center items-center min-w-[85px] border-r border-brand-100/50">
+                                        <span className="text-4xl font-serif font-bold text-brand-800 leading-none">
+                                            {format(meetingDate, 'd', { locale: ptBR })}
+                                        </span>
+                                        <span className="text-xs uppercase font-bold text-brand-600 tracking-widest mt-1">
+                                            {format(meetingDate, 'MMM', { locale: ptBR }).replace('.', '')}
+                                        </span>
+                                    </div>
 
-                                            {/* Informações */}
-                                            <div className="flex-grow">
-                                                <div className="flex items-center justify-between mb-1">
-                                                    <h3 className="font-serif text-lg font-bold text-stone-900">
-                                                        {meeting.bookTitle || 'Encontro do Clube'}
-                                                    </h3>
-                                                    {activeTab === 'upcoming' && (
-                                                        <button
-                                                            onClick={() => navigate(`/encontros/editar/${meeting.id}`)}
-                                                            className="p-2 rounded-lg text-stone-400 hover:text-brand-600 hover:bg-stone-50 transition-colors flex-shrink-0"
-                                                            title="Editar encontro"
-                                                        >
-                                                            <Edit2 className="w-4 h-4" />
-                                                        </button>
-                                                    )}
+                                    {/* 2. Área de Conteúdo */}
+                                    <div className="flex-grow p-5 flex flex-col justify-between relative">
+                                        {/* Botão de Editar */}
+                                        {activeTab === 'upcoming' && (
+                                            <button
+                                                onClick={() => navigate(`/encontros/editar/${meeting.id}`)}
+                                                className="absolute top-3 right-3 text-stone-400 hover:text-brand-600 p-1.5 rounded-lg hover:bg-stone-50 transition-all"
+                                                title="Editar encontro"
+                                            >
+                                                <Edit2 size={16} />
+                                            </button>
+                                        )}
+
+                                        {/* Título e Detalhes */}
+                                        <div>
+                                            <h3 className="font-serif text-xl font-bold text-stone-900 leading-tight pr-10 mb-3">
+                                                {meeting.bookTitle ? `Encontro: "${meeting.bookTitle}"` : 'Encontro do Clube'}
+                                            </h3>
+
+                                            <div className="flex flex-wrap items-center gap-4 text-sm text-stone-500 font-medium">
+                                                {/* Horário */}
+                                                <div className="flex items-center">
+                                                    <Clock size={14} className="mr-1.5 text-brand-500" />
+                                                    {format(meetingDate, 'HH:mm', { locale: ptBR })}h
                                                 </div>
-
-                                                <div className="space-y-1 text-sm text-stone-600 mb-3">
-                                                    <div className="flex items-center gap-2">
-                                                        <Calendar className="w-4 h-4" />
-                                                        {format(meetingDate, "dd 'de' MMMM 'às' HH:mm", { locale: ptBR })}
-                                                    </div>
-                                                    {meeting.locationLink ? (
-                                                        <a
-                                                            href={meeting.locationLink}
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                            className="flex items-center gap-2 text-stone-600 hover:text-brand-600 transition-colors w-fit"
-                                                        >
-                                                            <MapPin className="w-4 h-4" />
-                                                            <span className="hover:underline decoration-brand-500 underline-offset-2">{meeting.locationName}</span>
-                                                            <ExternalLink className="w-3 h-3" />
-                                                        </a>
-                                                    ) : (
-                                                        <div className="flex items-center gap-2">
-                                                            <MapPin className="w-4 h-4" />
+                                                {/* Local com Link */}
+                                                {meeting.locationLink ? (
+                                                    <a
+                                                        href={meeting.locationLink}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="flex items-center hover:text-brand-700 group"
+                                                    >
+                                                        <MapPin size={14} className="mr-1.5 text-brand-500 group-hover:text-brand-700" />
+                                                        <span className="underline decoration-dotted decoration-stone-300 underline-offset-2 group-hover:decoration-brand-500">
                                                             {meeting.locationName}
-                                                        </div>
-                                                    )}
-                                                    <div className="flex items-center gap-2">
-                                                        <Users className="w-4 h-4" />
-                                                        {rsvpCount} {rsvpCount === 1 ? 'confirmação' : 'confirmações'}
+                                                        </span>
+                                                    </a>
+                                                ) : (
+                                                    <div className="flex items-center">
+                                                        <MapPin size={14} className="mr-1.5 text-brand-500" />
+                                                        {meeting.locationName}
                                                     </div>
-                                                </div>
+                                                )}
+                                            </div>
+                                        </div>
 
-                                                {/* Avatares */}
-                                                {rsvpCount > 0 && (
-                                                    <div className="flex -space-x-2 mb-3">
-                                                        {rsvpList.slice(0, 5).map((rsvp, idx) => (
-                                                            <div key={idx} className="w-8 h-8 rounded-full border-2 border-white bg-stone-200 overflow-hidden">
-                                                                <img src={rsvp.photoURL} alt={rsvp.name} />
+                                        {/* Rodapé do Card (Avatares e RSVP) */}
+                                        <div className="flex justify-between items-end mt-5 pt-4 border-t border-stone-100">
+                                            {/* Stack de Avatares (Quem vai) */}
+                                            <div className="flex -space-x-2">
+                                                {rsvpCount > 0 ? (
+                                                    <>
+                                                        {rsvpList.slice(0, 3).map((rsvp, idx) => (
+                                                            <div key={idx} className="w-8 h-8 rounded-full border-2 border-white bg-stone-200 overflow-hidden ring-1 ring-stone-100">
+                                                                <img src={rsvp.photoURL} alt={rsvp.name} className="w-full h-full object-cover" />
                                                             </div>
                                                         ))}
-                                                        {rsvpCount > 5 && (
-                                                            <div className="w-8 h-8 rounded-full border-2 border-white bg-stone-900 text-white flex items-center justify-center text-xs font-bold">
-                                                                +{rsvpCount - 5}
+                                                        {rsvpCount > 3 && (
+                                                            <div className="w-8 h-8 rounded-full border-2 border-white bg-stone-900 text-white flex items-center justify-center text-xs font-bold ring-1 ring-stone-100">
+                                                                +{rsvpCount - 3}
                                                             </div>
                                                         )}
-                                                    </div>
-                                                )}
-
-                                                {/* Botão RSVP (apenas para encontros futuros) */}
-                                                {activeTab === 'upcoming' && (
-                                                    <button
-                                                        onClick={() => handleRSVP(meeting.id)}
-                                                        className={`px-4 py-2 rounded-lg font-medium text-sm transition-colors ${isUserGoing
-                                                            ? 'bg-green-50 text-green-700 border-2 border-green-200 hover:bg-green-100'
-                                                            : 'bg-brand-50 text-brand-700 border-2 border-brand-200 hover:bg-brand-100'
-                                                            }`}
-                                                    >
-                                                        {isUserGoing ? '✓ Confirmado' : 'Eu vou!'}
-                                                    </button>
+                                                    </>
+                                                ) : (
+                                                    <span className="text-xs text-stone-400 italic">Nenhuma confirmação</span>
                                                 )}
                                             </div>
+
+                                            {/* Botão/Badge RSVP */}
+                                            {activeTab === 'upcoming' && (
+                                                <button
+                                                    onClick={() => handleRSVP(meeting.id)}
+                                                    className={`text-xs font-bold px-3 py-1.5 rounded-full transition-all ${isUserGoing
+                                                        ? 'bg-green-50 text-green-700 border border-green-200 hover:bg-green-100'
+                                                        : 'bg-brand-50 text-brand-700 border border-brand-200 hover:bg-brand-100'
+                                                        }`}
+                                                >
+                                                    {isUserGoing ? '✓ Confirmado' : 'Confirmar'}
+                                                </button>
+                                            )}
                                         </div>
                                     </div>
                                 </div>
                             );
                         })}
-                    </div>
+                    </div >
                 ) : (
                     /* Empty State */
                     <div className="bg-white rounded-2xl shadow-md p-10 text-center border border-stone-200">
@@ -236,7 +238,7 @@ export default function Meetings() {
                         )}
                     </div>
                 )}
-            </div>
-        </div>
+            </div >
+        </div >
     );
 }
