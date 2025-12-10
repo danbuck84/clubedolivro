@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { MeetingCard } from "@/components/MeetingCard";
+import { Navbar } from "@/components/Navbar";
 import {
   getNextMeeting,
   toggleRSVP,
@@ -14,7 +15,10 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Loader2, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
+import { toHttps } from "@/lib/utils";
 
 export default function Home() {
   const { user, logout } = useAuth();
@@ -67,21 +71,26 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen bg-stone-50 p-6">
-      <div className="max-w-4xl mx-auto">
+    <main className="min-h-screen bg-stone-50 pb-20">
+      <div className="max-w-4xl mx-auto p-6">
         {/* Header */}
         <header className="mb-8 flex justify-between items-center">
           <div>
             <h1 className="font-serif text-4xl font-bold text-stone-900 mb-2">
               Olá, {user?.displayName?.split(" ")[0]}! 👋
             </h1>
-            <p className="text-stone-600 text-lg">
-              Bem-vindo ao Clube do Livro
-            </p>
+            <p className="text-stone-600 text-lg">Bem-vindo ao Clube do Livro</p>
           </div>
-          <Button variant="outline" onClick={logout}>
-            Sair
-          </Button>
+          <Link href="/perfil" className="flex-shrink-0">
+            <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-amber-200 cursor-pointer hover:border-amber-400 transition-colors relative">
+              <Image
+                src={toHttps(user?.photoURL)}
+                alt={user?.displayName || ""}
+                fill
+                className="object-cover"
+              />
+            </div>
+          </Link>
         </header>
 
         {/* Meeting Section */}
@@ -93,7 +102,11 @@ export default function Home() {
           {meeting ? (
             <MeetingCard
               day={format(meeting.date.toDate(), "d")}
-              month={format(meeting.date.toDate(), "MMM", { locale: ptBR }).toUpperCase()}
+              month={format(
+                meeting.date.toDate(),
+                "MMM",
+                { locale: ptBR }
+              ).toUpperCase()}
               title={`Debate: "${meeting.bookTitle}"`}
               location={meeting.locationName}
               locationLink={meeting.locationLink}
@@ -115,9 +128,11 @@ export default function Home() {
               <p className="text-stone-600 mb-6">
                 Que tal agendar o próximo encontro do clube?
               </p>
-              <Button className="bg-amber-600 hover:bg-amber-700">
-                Agendar Encontro
-              </Button>
+              <Link href="/encontros/criar">
+                <Button className="bg-amber-600 hover:bg-amber-700">
+                  Agendar Encontro
+                </Button>
+              </Link>
             </div>
           )}
         </section>
@@ -135,6 +150,8 @@ export default function Home() {
           </p>
         </div>
       </div>
+
+      <Navbar />
     </main>
   );
 }
